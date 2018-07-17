@@ -4,16 +4,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".currency.CurrencyActivity">
+    tools:context=".currency.CurrencyActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtPrompt"
+            style="@style/TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="15dp"
+            android:paddingTop="20dp"
+            android:text="請選擇幣別:" />
+
+        <Spinner
+            android:id="@+id/spin_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical" />
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.61"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="現金匯率" />
+
+            <RadioButton
+                android:id="@+id/radioButton4"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="5dp"
+                android:text="即期匯率" />
+        </RadioGroup>
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_currency_table"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+
+            <TableRow
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_currency_table_top_row">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_currency_table_buy"
+                    android:gravity="center"
+                    android:text="買進" />
+
+                <TextView
+                    android:id="@+id/txt_cash_buy"
+                    style="@style/TextStyle"
+                    android:layout_weight="4"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/txt_spot_buy"
+                    style="@style/TextStyle"
+                    android:layout_weight="4"
+                    android:gravity="center" />
+            </TableRow>
+
+            <TableRow android:background="@drawable/bg_currency_table_bottom_row">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_currency_table_sell"
+                    android:gravity="center"
+                    android:text="賣出" />
+
+                <TextView
+                    android:id="@+id/txt_cash_sell"
+                    style="@style/TextStyle"
+                    android:layout_weight="4"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/txt_spot_sell"
+                    style="@style/TextStyle"
+                    android:layout_weight="4"
+                    android:gravity="center" />
+            </TableRow>
+
+        </TableLayout>
+
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
-        android:id="@+id/txtResult"
+        android:id="@+id/txt_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

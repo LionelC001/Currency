@@ -8,6 +8,7 @@ import com.lionel.currency.currency.model.CurrencyModel;
 import com.lionel.currency.currency.view.ICurrencyView;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class CurrencyPresenter implements ICurrencyPresenter {
     private ICurrencyView currencyView;
@@ -25,7 +26,7 @@ public class CurrencyPresenter implements ICurrencyPresenter {
             super.handleMessage(msg);
             CurrencyActivity currencyView = weakReference.get();
             if (currencyView != null) {
-                String data = (String) msg.obj;
+                List<Object> data = (List<Object>) msg.obj;
                 currencyView.setData(data);
             }
         }

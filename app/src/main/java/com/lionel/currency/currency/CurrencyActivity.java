@@ -72,8 +72,8 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mTxtSpotBuy.setText(mCurrencyRateList.get(position).getSpotBuyRate());
         mTxtSpotSell.setText(mCurrencyRateList.get(position).getSpotSellRate());
 
-//        mTxtCashBuy.setBackgroundResource(R.drawable.bg_currency_table_top_selected);
-//        mTxtCashSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_selected);
+      /*  mTxtSpotBuy.setBackgroundResource(R.drawable.bg_currency_table_top_selected);
+        mTxtSpotSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_selected);*/
     }
 
     @Override

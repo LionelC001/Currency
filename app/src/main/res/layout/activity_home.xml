@@ -93,6 +93,7 @@
 
                 <TextView
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_currency_table_buy"
                     android:gravity="center"
@@ -101,12 +102,14 @@
                 <TextView
                     android:id="@+id/txt_cash_buy"
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center" />
 
                 <TextView
                     android:id="@+id/txt_spot_buy"
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center" />
             </TableRow>
@@ -115,6 +118,7 @@
 
                 <TextView
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_currency_table_sell"
                     android:gravity="center"
@@ -123,12 +127,14 @@
                 <TextView
                     android:id="@+id/txt_cash_sell"
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center" />
 
                 <TextView
                     android:id="@+id/txt_spot_sell"
                     style="@style/TextStyle"
+                    android:layout_width="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center" />
             </TableRow>

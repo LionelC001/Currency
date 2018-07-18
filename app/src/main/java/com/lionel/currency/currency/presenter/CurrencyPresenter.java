@@ -42,4 +42,21 @@ public class CurrencyPresenter implements ICurrencyPresenter {
     public void requestData() {
         currencyModel.requestUData();
     }
+
+    @Override
+    public void convert(String nt, String foreign, String buyRate, String sellRate) {
+        float result;
+        //如果沒有匯率, 則不計算
+        if (buyRate.equals("-")) {
+            currencyView.onConvertResult("-");
+        } else {
+            //判斷是台幣換成外幣,或是相反
+            if (!nt.equals("")) {
+                result = Float.parseFloat(nt) / Float.parseFloat(sellRate);
+            } else {
+                result = Float.parseFloat(foreign) * Float.parseFloat(buyRate);
+            }
+            currencyView.onConvertResult(String.format("%.3f", result));
+        }
+    }
 }

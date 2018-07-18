@@ -7,42 +7,49 @@
     tools:context=".currency.CurrencyActivity"
     tools:layout_editor_absoluteY="81dp">
 
-    <Spinner
-        android:id="@+id/spin_country"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_currency_spinner"
-        android:elevation="8dp"
-        android:scrollbars="vertical"
-        android:spinnerMode="dialog"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_currency_board"
+        android:elevation="12dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:padding="10dp"
+        android:paddingBottom="30dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spin_country">
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Spinner
+            android:id="@+id/spin_country"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_currency_spinner"
+            android:elevation="8dp"
+            android:scrollbars="vertical"
+            android:spinnerMode="dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/constraintLayout" />
 
         <RadioGroup
             android:id="@+id/rad_group_rate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:gravity="end"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.61"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/spin_country">
 
             <RadioButton
                 android:id="@+id/rad_btn_cash"
@@ -68,7 +75,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginStart="4dp"
             android:background="@drawable/bg_currency_table"
-            android:padding="5dp"
+            android:padding="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rad_group_rate">
@@ -154,7 +161,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/bg_currency_input_box"
         android:digits="0123456789."
         android:elevation="4dp"
@@ -171,7 +178,7 @@
         android:layout_marginBottom="56dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/bg_currency_input_box"
         android:digits="0123456789."
         android:elevation="4dp"
@@ -188,7 +195,7 @@
         android:id="@+id/btn_convert"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="?android:attr/selectableItemBackground"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"

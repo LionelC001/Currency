@@ -1,10 +1,14 @@
 package com.lionel.currency.currency;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -95,12 +99,21 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
             case R.id.btn_convert:
                 doConvert();
                 break;
-
             case R.id.btn_clear:
-                mEdtNTCurrency.setText("");
-                mEdtForeignCurrency.setText("");
+                doClear();
                 break;
         }
+    }
+
+    private void doClear() {
+        //讓按鈕實現動畫
+        AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_btn_clear);
+        anim.setTarget(mBtnClear);
+        anim.start();
+
+        //清除輸入框的數值
+        mEdtNTCurrency.setText("");
+        mEdtForeignCurrency.setText("");
     }
 
     private void doConvert() {
@@ -133,6 +146,11 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
 
     @Override
     public void onConvertResult(String result) {
+        //讓按鈕實現動畫
+        Animation anim = AnimationUtils.loadAnimation(CurrencyActivity.this, R.anim.anim_btn_convert);
+        mBtnConvert.startAnimation(anim);
+
+        //將計算結果顯示在空欄位
         if (!mEdtNTCurrency.getText().toString().equals("")) {
             mEdtForeignCurrency.setText(result);
         } else {

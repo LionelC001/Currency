@@ -30,7 +30,7 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     private List<CurrencyRate> mCurrencyRateList;
     private RadioGroup mRadGroupRate;
     private EditText mEdtNTCurrency, mEdtForeignCurrency;
-    private ImageButton mBtnConvert;
+    private ImageButton mBtnConvert, mBtnClear;
 
 
     @Override
@@ -57,6 +57,8 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mEdtForeignCurrency = findViewById(R.id.edt_foreign_currency);
         mBtnConvert = findViewById(R.id.btn_convert);
         mBtnConvert.setOnClickListener(CurrencyActivity.this);
+        mBtnClear = findViewById(R.id.btn_clear);
+        mBtnClear.setOnClickListener(CurrencyActivity.this);
 
         //限制只能輸入正常數字, 例如不能同時有兩個小數點
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -91,29 +93,41 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_convert:
-                // 取得輸入的錢幣數值
-                String sNtCurrency = mEdtNTCurrency.getText().toString();
-                String sForeignCurrency = mEdtForeignCurrency.getText().toString();
-                //錢幣數值必不為空
-                if (!sNtCurrency.equals("") || !sForeignCurrency.equals("")) {
-                    //根據所選牌告利率, 傳送對應利率
-                    if (mRadGroupRate.getCheckedRadioButtonId() == R.id.rad_btn_cash) {
-                        currencyPresenter.convert(
-                                sNtCurrency,
-                                sForeignCurrency,
-                                mTxtCashBuy.getText().toString(),
-                                mTxtCashSell.getText().toString());
-                    } else if (mRadGroupRate.getCheckedRadioButtonId() == R.id.rad_btn_spot) {
-                        currencyPresenter.convert(
-                                sNtCurrency,
-                                sForeignCurrency,
-                                mTxtSpotBuy.getText().toString(),
-                                mTxtSpotSell.getText().toString());
-                    } else {
-                        Toast.makeText(this, "請選擇一種牌告利率", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                doConvert();
                 break;
+
+            case R.id.btn_clear:
+                mEdtNTCurrency.setText("");
+                mEdtForeignCurrency.setText("");
+                break;
+        }
+    }
+
+    private void doConvert() {
+        //取得輸入的錢幣數值
+        String sNtCurrency = mEdtNTCurrency.getText().toString();
+        String sForeignCurrency = mEdtForeignCurrency.getText().toString();
+
+        if (!sNtCurrency.equals("") && !sForeignCurrency.equals("")) {
+            Toast.makeText(this, "一次只能輸入一組數值", Toast.LENGTH_SHORT).show();
+        } else if (!sNtCurrency.equals("") || !sForeignCurrency.equals("")) {
+            //錢幣數值必不為空
+            //根據所選牌告利率, 傳送對應利率
+            if (mRadGroupRate.getCheckedRadioButtonId() == R.id.rad_btn_cash) {
+                currencyPresenter.convert(
+                        sNtCurrency,
+                        sForeignCurrency,
+                        mTxtCashBuy.getText().toString(),
+                        mTxtCashSell.getText().toString());
+            } else if (mRadGroupRate.getCheckedRadioButtonId() == R.id.rad_btn_spot) {
+                currencyPresenter.convert(
+                        sNtCurrency,
+                        sForeignCurrency,
+                        mTxtSpotBuy.getText().toString(),
+                        mTxtSpotSell.getText().toString());
+            } else {
+                Toast.makeText(this, "請選擇一種牌告利率", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

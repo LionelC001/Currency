@@ -1,10 +1,12 @@
 package com.lionel.currency.currency;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +20,12 @@ import com.lionel.currency.currency.view.ICurrencyView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrencyActivity extends AppCompatActivity implements ICurrencyView, AdapterView.OnItemSelectedListener {
+public class CurrencyActivity extends AppCompatActivity implements ICurrencyView, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
     private ICurrencyPresenter currencyPresenter;
     private TextView mTxtTime, mTxtCashBuy, mTxtCashSell, mTxtSpotBuy, mTxtSpotSell;
     private Spinner mSpinCountry;
     private List<CurrencyRate> mCurrencyRateList;
+    private RadioGroup mRadGroupRate;
 
 
     @Override
@@ -42,6 +45,8 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mTxtSpotBuy = findViewById(R.id.txt_spot_buy);
         mTxtSpotSell = findViewById(R.id.txt_spot_sell);
         mSpinCountry = findViewById(R.id.spin_country);
+        mRadGroupRate = findViewById(R.id.rad_group_rate);
+        mRadGroupRate.setOnCheckedChangeListener(CurrencyActivity.this);
     }
 
     @Override
@@ -71,13 +76,27 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mTxtCashSell.setText(mCurrencyRateList.get(position).getCashSellRate());
         mTxtSpotBuy.setText(mCurrencyRateList.get(position).getSpotBuyRate());
         mTxtSpotSell.setText(mCurrencyRateList.get(position).getSpotSellRate());
-
-      /*  mTxtSpotBuy.setBackgroundResource(R.drawable.bg_currency_table_top_selected);
-        mTxtSpotSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_selected);*/
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        //Highlight選取的匯率
+        if (checkedId == R.id.rad_btn_cash) {
+            mTxtCashBuy.setBackgroundResource(R.drawable.bg_currency_table_top_selected);
+            mTxtCashSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_selected);
+            mTxtSpotBuy.setBackgroundResource(R.drawable.bg_currency_table_top_unselected);
+            mTxtSpotSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_unselected);
+        } else {
+            mTxtSpotBuy.setBackgroundResource(R.drawable.bg_currency_table_top_selected);
+            mTxtSpotSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_selected);
+            mTxtCashBuy.setBackgroundResource(R.drawable.bg_currency_table_top_unselected);
+            mTxtCashSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_unselected);
+        }
     }
 }

@@ -48,6 +48,11 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         currencyPresenter = new CurrencyPresenter(this);
 
         initViews();
+        requestData();
+    }
+
+    @Override
+    public void requestData() {
         currencyPresenter.requestData();
     }
 
@@ -121,8 +126,6 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
 
         //顯示清單
         Dialog dialog = new DialogSetting(CurrencyActivity.this);
-        dialog.getWindow().setGravity(Gravity.BOTTOM | Gravity.START);
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_currency_dialog_setting);
         dialog.show();
         dialog.getWindow().setLayout(550, ViewGroup.LayoutParams.WRAP_CONTENT); //此函示必須在show()後面才能呼叫
     }

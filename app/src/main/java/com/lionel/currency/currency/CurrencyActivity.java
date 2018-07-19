@@ -2,11 +2,14 @@ package com.lionel.currency.currency;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.DigitsKeyListener;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -22,6 +25,7 @@ import com.lionel.currency.currency.adapter.CurrencySpinnerAdapter;
 import com.lionel.currency.currency.model.CurrencyRate;
 import com.lionel.currency.currency.presenter.CurrencyPresenter;
 import com.lionel.currency.currency.presenter.ICurrencyPresenter;
+import com.lionel.currency.currency.view.DialogSetting;
 import com.lionel.currency.currency.view.ICurrencyView;
 
 import java.util.ArrayList;
@@ -34,7 +38,7 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     private List<CurrencyRate> mCurrencyRateList;
     private RadioGroup mRadGroupRate;
     private EditText mEdtNTCurrency, mEdtForeignCurrency;
-    private ImageButton mBtnConvert, mBtnClear;
+    private ImageButton mBtnConvert, mBtnClear, mBtnSetting;
 
 
     @Override
@@ -63,6 +67,8 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mBtnConvert.setOnClickListener(CurrencyActivity.this);
         mBtnClear = findViewById(R.id.btn_clear);
         mBtnClear.setOnClickListener(CurrencyActivity.this);
+        mBtnSetting = findViewById(R.id.btn_setting);
+        mBtnSetting.setOnClickListener(CurrencyActivity.this);
 
         //限制只能輸入正常數字, 例如不能同時有兩個小數點
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -102,7 +108,23 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
             case R.id.btn_clear:
                 doClear();
                 break;
+            case R.id.btn_setting:
+                showSetting();
+                break;
         }
+    }
+
+    private void showSetting() {
+        AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_btn_setting);
+        anim.setTarget(mBtnSetting);
+        anim.start();
+
+        //顯示清單
+        Dialog dialog = new DialogSetting(CurrencyActivity.this);
+        dialog.getWindow().setGravity(Gravity.BOTTOM | Gravity.START);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_currency_dialog_setting);
+        dialog.show();
+        dialog.getWindow().setLayout(550, ViewGroup.LayoutParams.WRAP_CONTENT); //此函示必須在show()後面才能呼叫
     }
 
     private void doClear() {

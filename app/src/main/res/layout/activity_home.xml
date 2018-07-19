@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorLightYellow"
     tools:context=".currency.CurrencyActivity"
     tools:layout_editor_absoluteY="81dp">
 
@@ -32,8 +33,8 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_currency_spinner"
             android:elevation="8dp"
-            android:scrollbars="vertical"
-            android:spinnerMode="dialog"
+            android:popupBackground="@drawable/bg_currency_dialog_setting"
+            android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -233,5 +234,18 @@
         android:text="資料來源: 台灣銀行"
         app:layout_constraintBottom_toTopOf="@+id/txt_time"
         app:layout_constraintStart_toStartOf="@+id/txt_time" />
+
+    <ImageButton
+        android:id="@+id/btn_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_currency_setting" />
 
 </android.support.constraint.ConstraintLayout>

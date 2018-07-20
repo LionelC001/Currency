@@ -80,7 +80,9 @@ public class DialogSetting extends Dialog implements AdapterView.OnItemClickList
                 ((CurrencyActivity) mContext).requestData();
                 break;
             case 1:
+                ((CurrencyActivity) mContext).showGuide();
                 break;
         }
+        dismiss();
     }
 }

@@ -1,9 +1,9 @@
 package com.lionel.currency.currency.model;
 
-public class CurrencyRate {
+public class CurrencyRateObject {
     private String country, cashBuyRate, cashSellRate, spotBuyRate, spotSellRate;
 
-    public CurrencyRate() {
+    public CurrencyRateObject() {
     }
 
     public void setCountry(String country) {

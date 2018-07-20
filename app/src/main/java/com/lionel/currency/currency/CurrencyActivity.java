@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.DigitsKeyListener;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -15,18 +14,22 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lionel.currency.R;
 import com.lionel.currency.currency.adapter.CurrencySpinnerAdapter;
-import com.lionel.currency.currency.model.CurrencyRate;
+import com.lionel.currency.currency.model.CurrencyRateObject;
 import com.lionel.currency.currency.presenter.CurrencyPresenter;
 import com.lionel.currency.currency.presenter.ICurrencyPresenter;
 import com.lionel.currency.currency.view.DialogSetting;
 import com.lionel.currency.currency.view.ICurrencyView;
+import com.takusemba.spotlight.SimpleTarget;
+import com.takusemba.spotlight.Spotlight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +37,11 @@ import java.util.List;
 public class CurrencyActivity extends AppCompatActivity implements ICurrencyView, View.OnClickListener {
     private ICurrencyPresenter currencyPresenter;
     private TextView mTxtTime, mTxtCashBuy, mTxtCashSell, mTxtSpotBuy, mTxtSpotSell, mTxtForeighName;
+    private TableLayout mTableCurrency;
     private Spinner mSpinCountry;
-    private List<CurrencyRate> mCurrencyRateList;
+    private List<CurrencyRateObject> mCurrencyRateObjectList;
     private RadioGroup mRadGroupRate;
+    private RadioButton mRadBtnCash, mRadBtnSpot;
     private EditText mEdtNTCurrency, mEdtForeignCurrency;
     private ImageButton mBtnConvert, mBtnClear, mBtnSetting;
 
@@ -45,7 +50,7 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        currencyPresenter = new CurrencyPresenter(this);
+        currencyPresenter = new CurrencyPresenter(CurrencyActivity.this, this);
 
         initViews();
         requestData();
@@ -58,6 +63,8 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
 
     private void initViews() {
         mTxtTime = findViewById(R.id.txt_time);
+        mTableCurrency = findViewById(R.id.table_currency);
+
         mTxtCashBuy = findViewById(R.id.txt_cash_buy);
         mTxtCashSell = findViewById(R.id.txt_cash_sell);
         mTxtSpotBuy = findViewById(R.id.txt_spot_buy);
@@ -66,6 +73,8 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mSpinCountry = findViewById(R.id.spin_country);
         mRadGroupRate = findViewById(R.id.rad_group_rate);
         mRadGroupRate.setOnCheckedChangeListener(new CheckedChangeListener());
+        mRadBtnCash = findViewById(R.id.rad_btn_cash);
+        mRadBtnSpot = findViewById(R.id.rad_btn_spot);
         mEdtNTCurrency = findViewById(R.id.edt_nt_currency);
         mEdtForeignCurrency = findViewById(R.id.edt_foreign_currency);
         mBtnConvert = findViewById(R.id.btn_convert);
@@ -86,22 +95,43 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     }
 
     @Override
-    public void setData(List<Object> data) {
+    public void onRequestDataResult(List<Object> data) {
         //設定更新時間
         String time = getString(R.string.update_time) + (String) data.get(1);
         mTxtTime.setText(time);
 
         //取得匯率List
-        mCurrencyRateList = (List<CurrencyRate>) data.get(0);
+        mCurrencyRateObjectList = (List<CurrencyRateObject>) data.get(0);
 
         //製作傳給Spinner的國名清單
         List<String> countryList = new ArrayList<>();
-        for (int i = 0; i < mCurrencyRateList.size(); i++) {
-            countryList.add(mCurrencyRateList.get(i).getCountry());
+        for (int i = 0; i < mCurrencyRateObjectList.size(); i++) {
+            countryList.add(mCurrencyRateObjectList.get(i).getCountry());
         }
 
         mSpinCountry.setAdapter(new CurrencySpinnerAdapter(this, countryList));
         mSpinCountry.setOnItemSelectedListener(new ItemSelectedListener());
+
+        //待抓取檔案完成後
+        //如果是第一次開啟APP, 顯示新人指引
+        if (currencyPresenter.checkFirstTime()) {
+            showGuide();
+        }
+    }
+
+    @Override
+    public void showGuide() {
+        List<SimpleTarget> targets = currencyPresenter.needGuideTarget(
+                mRadGroupRate, mSpinCountry, mTxtCashBuy, mTxtSpotBuy, mBtnConvert, mRadBtnCash, mRadBtnSpot,
+                mEdtNTCurrency, mBtnConvert, mEdtForeignCurrency, mBtnClear, mBtnSetting);
+
+
+        Spotlight.with(CurrencyActivity.this)
+                .setDuration(100)
+                .setTargets(targets.get(0), targets.get(1), targets.get(2), targets.get(3),
+                        targets.get(4), targets.get(5), targets.get(6), targets.get(7), targets.get(8),
+                        targets.get(9), targets.get(10), targets.get(11), targets.get(12))
+                .start();
     }
 
     @Override
@@ -114,12 +144,12 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
                 doClear();
                 break;
             case R.id.btn_setting:
-                showSetting();
+                showDialogSetting();
                 break;
         }
     }
 
-    private void showSetting() {
+    private void showDialogSetting() {
         AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_btn_setting);
         anim.setTarget(mBtnSetting);
         anim.start();
@@ -188,13 +218,13 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //點選Spinner裡的國家,會出現相對應的匯率
-            mTxtCashBuy.setText(mCurrencyRateList.get(position).getCashBuyRate());
-            mTxtCashSell.setText(mCurrencyRateList.get(position).getCashSellRate());
-            mTxtSpotBuy.setText(mCurrencyRateList.get(position).getSpotBuyRate());
-            mTxtSpotSell.setText(mCurrencyRateList.get(position).getSpotSellRate());
+            mTxtCashBuy.setText(mCurrencyRateObjectList.get(position).getCashBuyRate());
+            mTxtCashSell.setText(mCurrencyRateObjectList.get(position).getCashSellRate());
+            mTxtSpotBuy.setText(mCurrencyRateObjectList.get(position).getSpotBuyRate());
+            mTxtSpotSell.setText(mCurrencyRateObjectList.get(position).getSpotSellRate());
 
             //顯示相對應的國家名
-            mTxtForeighName.setText(mCurrencyRateList.get(position).getCountry());
+            mTxtForeighName.setText(mCurrencyRateObjectList.get(position).getCountry());
         }
 
         @Override

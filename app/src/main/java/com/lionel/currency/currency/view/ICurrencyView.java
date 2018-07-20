@@ -7,8 +7,11 @@ public interface ICurrencyView {
     void requestData();
 
     //將網路抓取下來的資料顯示到View上
-    void setData(List<Object> data);
+    void onRequestDataResult(List<Object> data);
 
     //轉換幣值的結果
     void onConvertResult(String result);
+
+    //展示新人指引
+    void showGuide();
 }

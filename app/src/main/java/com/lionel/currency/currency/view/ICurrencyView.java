@@ -14,4 +14,7 @@ public interface ICurrencyView {
 
     //展示新人指引
     void showGuide();
+
+    //展示讀取動畫
+    void showLoading(String mode);
 }

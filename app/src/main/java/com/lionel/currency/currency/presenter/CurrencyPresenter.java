@@ -59,7 +59,7 @@ public class CurrencyPresenter implements ICurrencyPresenter {
         //開場白
         SimpleTarget opening = new SimpleTarget.Builder((Activity) currencyView)
                 .setTitle("新手指引")
-                .setDescription("感謝您使用這款貨幣匯率轉換器, 接下來將簡單為您介紹功能。")
+                .setDescription("感謝您使用這款貨幣匯率轉換器，接下來將簡單為您介紹功能。")
                 .setPoint(540, 700)
                 .setRadius(1)
                 .build();
@@ -67,10 +67,10 @@ public class CurrencyPresenter implements ICurrencyPresenter {
 
         //製作要被介紹的Target和敘述
         String[] titles = new String[]{"匯率", "匯率", "匯率", "匯率", "換算", "換算", "換算", "換算", "換算", "換算", "換算"};
-        String[] descriptions = new String[]{"這裡是顯示所選地區的匯率的地方。", "在這裡選擇地區,", "這裡會分別顯示現金匯率,", "以及即期匯率。",
-                "這裡是操作換算幣值的地方。", "請先選擇要換算現金匯率,", "或是即期匯率。", "在這裡輸入要換算的幣值,", "按下換算鈕,"
-                , "換算後的幣值將出現在這裡。\n\n反之也可將外幣輸入在這,作台幣換算。", "按此鈕清除所有數值。"};
-        float[] radius = new float[]{400, 200, 200, 200, 500, 150, 150, 300, 200, 300, 100};
+        String[] descriptions = new String[]{"這裡是顯示所選地區的匯率的地方。", "在這裡選擇地區，", "這裡會分別顯示現金匯率，", "以及即期匯率。",
+                "這裡是操作換算幣值的地方。", "請先選擇要用現金匯率換算，", "或是即期匯率。", "在這裡輸入要換算的幣值，", "按下換算鈕，"
+                , "換算後的幣值將出現在這裡。\n\n反之也可將外幣輸入在這，作台幣換算。", "按此鈕清除所有數值。"};
+        float[] radius = new float[]{400, 200, 200, 200, 520, 150, 150, 300, 200, 300, 100};
 
         for (int i = 0; i < views.length - 1; i++) {
             SimpleTarget target = new SimpleTarget.Builder((Activity) currencyView)

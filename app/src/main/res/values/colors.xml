@@ -10,5 +10,5 @@
     <color name="colorLightBlue">#eb6bb1e7</color>
     <color name="colorLightGray">#ebececec</color>
     <color name="colorTransparentWhite">#a3ffffff</color>
-
+    <color name="colorTransparentBlack">#b8000000</color>
 </resources>

@@ -40,8 +40,8 @@ public class DialogSetting extends Dialog implements AdapterView.OnItemClickList
     private void initListView() {
         mListSetting = findViewById(R.id.list_setting);
 
-        String[] listItemText = new String[]{"重新整理", "新手指引"};
-        int[] listItemImg = new int[]{R.drawable.ic_refresh, R.drawable.ic_guide};
+        String[] listItemText = new String[]{"重新整理", "新手指引", "展示動畫"};
+        int[] listItemImg = new int[]{R.drawable.ic_refresh, R.drawable.ic_guide, R.drawable.ic_play_arrow};
         List<Map<String, Object>> listItem = new ArrayList<>();
         for (int i = 0; i < listItemImg.length; i++) {
             Map<String, Object> item = new HashMap<>();
@@ -70,7 +70,7 @@ public class DialogSetting extends Dialog implements AdapterView.OnItemClickList
 
         getWindow().setBackgroundDrawableResource(R.drawable.bg_currency_dialog_setting);
         //設定Dialog進出場的動畫效果
-        getWindow().setWindowAnimations(R.style.AnimDialogSetting);
+        getWindow().setWindowAnimations(R.style.AnimDialog);
     }
 
     @Override
@@ -82,6 +82,8 @@ public class DialogSetting extends Dialog implements AdapterView.OnItemClickList
             case 1:
                 ((CurrencyActivity) mContext).showGuide();
                 break;
+            case 2:
+                ((CurrencyActivity) mContext).showLoading("demo");
         }
         dismiss();
     }

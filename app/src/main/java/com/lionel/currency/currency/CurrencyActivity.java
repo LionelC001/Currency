@@ -1,23 +1,27 @@
 package com.lionel.currency.currency;
 
+import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,14 +40,16 @@ import java.util.List;
 
 public class CurrencyActivity extends AppCompatActivity implements ICurrencyView, View.OnClickListener {
     private ICurrencyPresenter currencyPresenter;
-    private TextView mTxtTime, mTxtCashBuy, mTxtCashSell, mTxtSpotBuy, mTxtSpotSell, mTxtForeighName;
-    private TableLayout mTableCurrency;
+    private View mLayoutLoading;
+    private ImageView mImgLoading;
+    private TextView mTxtTime, mTxtCashBuy, mTxtCashSell, mTxtSpotBuy, mTxtSpotSell, mTxtForeignName, mTxtLoading;
     private Spinner mSpinCountry;
     private List<CurrencyRateObject> mCurrencyRateObjectList;
     private RadioGroup mRadGroupRate;
     private RadioButton mRadBtnCash, mRadBtnSpot;
     private EditText mEdtNTCurrency, mEdtForeignCurrency;
-    private ImageButton mBtnConvert, mBtnClear, mBtnSetting;
+    private ImageButton mBtnConvert, mBtnClear, mBtnSetting, mBtnLoadingCancel;
+    private Animator loadingAnim;
 
 
     @Override
@@ -59,17 +65,22 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     @Override
     public void requestData() {
         currencyPresenter.requestData();
+        //開啟讀取畫面
+        showLoading("loading");
     }
 
     private void initViews() {
+        mLayoutLoading = findViewById(R.id.layout_loading);
+        mImgLoading = findViewById(R.id.img_loading);
+        mTxtLoading = findViewById(R.id.txt_loading);
+        mBtnLoadingCancel = findViewById(R.id.btn_loading_cancel);
+        mBtnLoadingCancel.setOnClickListener(CurrencyActivity.this);
         mTxtTime = findViewById(R.id.txt_time);
-        mTableCurrency = findViewById(R.id.table_currency);
-
         mTxtCashBuy = findViewById(R.id.txt_cash_buy);
         mTxtCashSell = findViewById(R.id.txt_cash_sell);
         mTxtSpotBuy = findViewById(R.id.txt_spot_buy);
         mTxtSpotSell = findViewById(R.id.txt_spot_sell);
-        mTxtForeighName = findViewById(R.id.txt_foreign_name);
+        mTxtForeignName = findViewById(R.id.txt_foreign_name);
         mSpinCountry = findViewById(R.id.spin_country);
         mRadGroupRate = findViewById(R.id.rad_group_rate);
         mRadGroupRate.setOnCheckedChangeListener(new CheckedChangeListener());
@@ -112,10 +123,21 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mSpinCountry.setAdapter(new CurrencySpinnerAdapter(this, countryList));
         mSpinCountry.setOnItemSelectedListener(new ItemSelectedListener());
 
+        //關閉讀取畫面
+        hideLoading();
+
         //待抓取檔案完成後
-        //如果是第一次開啟APP, 顯示新人指引
+        //如果是第一次開啟APP, 詢問是否要新手指引
         if (currencyPresenter.checkFirstTime()) {
-            showGuide();
+            AlertDialog dialogGuide = new AlertDialog.Builder(CurrencyActivity.this)
+                    .setTitle("新手指引")
+                    .setMessage("是否要顯示簡易教學?")
+                    .setPositiveButton("好的", new GuideDialogClickListener())
+                    .setNegativeButton("不用", null)
+                    .setCancelable(true)
+                    .show();
+
+            dialogGuide.getWindow().setWindowAnimations(R.style.AnimDialog);
         }
     }
 
@@ -145,6 +167,10 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
                 break;
             case R.id.btn_setting:
                 showDialogSetting();
+                break;
+            case R.id.btn_loading_cancel:
+                loadingAnim.pause();
+                hideLoading();
                 break;
         }
     }
@@ -213,6 +239,33 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         }
     }
 
+    @Override
+    public void showLoading(String mode) {
+        //mode = "loading" or "demo"
+        mLayoutLoading.setVisibility(View.VISIBLE);
+        loadingAnim = AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_loading);
+        loadingAnim.setTarget(mImgLoading);
+        loadingAnim.start();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        //"mode = demo"時, 要額外顯示右上角的取消按鈕, 並關掉讀取字樣
+        if (mode.equals("demo")) {
+            mBtnLoadingCancel.setVisibility(View.VISIBLE);
+            mTxtLoading.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
+    }
+
+    private void hideLoading() {
+        mBtnLoadingCancel.setVisibility(View.GONE);
+        mTxtLoading.setVisibility(View.VISIBLE);
+        loadingAnim.pause();
+        mLayoutLoading.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
     private class ItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         @Override
@@ -224,7 +277,7 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
             mTxtSpotSell.setText(mCurrencyRateObjectList.get(position).getSpotSellRate());
 
             //顯示相對應的國家名
-            mTxtForeighName.setText(mCurrencyRateObjectList.get(position).getCountry());
+            mTxtForeignName.setText(mCurrencyRateObjectList.get(position).getCountry());
         }
 
         @Override
@@ -249,6 +302,14 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
                 mTxtCashBuy.setBackgroundResource(R.drawable.bg_currency_table_top_unselected);
                 mTxtCashSell.setBackgroundResource(R.drawable.bg_currency_table_bottom_unselected);
             }
+        }
+    }
+
+    private class GuideDialogClickListener implements DialogInterface.OnClickListener {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            showGuide();
         }
     }
 }

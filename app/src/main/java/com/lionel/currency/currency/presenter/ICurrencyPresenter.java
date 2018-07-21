@@ -18,4 +18,7 @@ public interface ICurrencyPresenter {
 
     //製作Guide的指引目標
     List<SimpleTarget> needGuideTarget(View... views);
+
+    //確認是否有網路連線
+    boolean isNetworkAvailable();
 }

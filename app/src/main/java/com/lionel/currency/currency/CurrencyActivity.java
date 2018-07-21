@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -64,9 +65,13 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
 
     @Override
     public void requestData() {
-        currencyPresenter.requestData();
-        //開啟讀取畫面
-        showLoading("loading");
+        if (currencyPresenter.isNetworkAvailable()) {
+            currencyPresenter.requestData();
+            //開啟讀取畫面
+            showLoading("loading");
+        } else {
+            Toast.makeText(this, "網路訊號不穩，請確認網路連線狀態。", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initViews() {
@@ -169,7 +174,6 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
                 showDialogSetting();
                 break;
             case R.id.btn_loading_cancel:
-                loadingAnim.pause();
                 hideLoading();
                 break;
         }

@@ -1,7 +1,10 @@
 package com.lionel.currency.currency.presenter;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -108,5 +111,16 @@ public class CurrencyPresenter implements ICurrencyPresenter {
             }
             currencyView.onConvertResult(String.format("%.3f", result));
         }
+    }
+
+    @Override
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) ((Context) currencyView).getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+        return networkInfo != null && networkInfo.isConnected();
     }
 }

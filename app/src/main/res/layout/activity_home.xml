@@ -271,6 +271,19 @@
         app:layout_constraintTop_toBottomOf="@+id/edt_foreign_currency"
         app:srcCompat="@drawable/ic_currency_clear" />
 
+    <ImageView
+        android:id="@+id/img_clear_talk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/btn_clear"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_clear"
+        app:srcCompat="@drawable/ic_currency_clear_talk" />
+
     <ImageButton
         android:id="@+id/btn_setting"
         android:layout_width="wrap_content"
@@ -301,4 +314,6 @@
         android:text="資料來源: 台灣銀行"
         app:layout_constraintBottom_toTopOf="@+id/txt_time"
         app:layout_constraintStart_toStartOf="@+id/txt_time" />
+
+
 </android.support.constraint.ConstraintLayout>

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -42,7 +41,7 @@ import java.util.List;
 public class CurrencyActivity extends AppCompatActivity implements ICurrencyView, View.OnClickListener {
     private ICurrencyPresenter currencyPresenter;
     private View mLayoutLoading;
-    private ImageView mImgLoading;
+    private ImageView mImgLoading, mImgClearTalk;
     private TextView mTxtTime, mTxtCashBuy, mTxtCashSell, mTxtSpotBuy, mTxtSpotSell, mTxtForeignName, mTxtLoading;
     private Spinner mSpinCountry;
     private List<CurrencyRateObject> mCurrencyRateObjectList;
@@ -95,6 +94,7 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         mEdtForeignCurrency = findViewById(R.id.edt_foreign_currency);
         mBtnConvert = findViewById(R.id.btn_convert);
         mBtnConvert.setOnClickListener(CurrencyActivity.this);
+        mImgClearTalk = findViewById(R.id.img_clear_talk);
         mBtnClear = findViewById(R.id.btn_clear);
         mBtnClear.setOnClickListener(CurrencyActivity.this);
         mBtnSetting = findViewById(R.id.btn_setting);
@@ -191,10 +191,19 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
     }
 
     private void doClear() {
-        //讓按鈕實現動畫
-        AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_btn_clear);
-        anim.setTarget(mBtnClear);
-        anim.start();
+        //實現清除按鈕的動畫
+        mBtnClear.bringToFront();
+        AnimatorSet animBtn = (AnimatorSet) AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_btn_clear);
+        animBtn.setTarget(mBtnClear);
+        animBtn.start();
+        //實現清除按鈕說的話的動畫
+        mImgClearTalk.setVisibility(View.VISIBLE);
+        mImgClearTalk.bringToFront();
+        AnimatorSet animImg = (AnimatorSet) AnimatorInflater.loadAnimator(CurrencyActivity.this, R.animator.anim_img_clear_talk);
+        animImg.setTarget(mImgClearTalk);
+        animImg.start();
+        //裝設傾聽器, 在動畫播完後, 隱藏mImgClearTalk
+        animImg.addListener(new ImageClearAnimatorListener());
 
         //清除輸入框的數值
         mEdtNTCurrency.setText("");
@@ -314,6 +323,28 @@ public class CurrencyActivity extends AppCompatActivity implements ICurrencyView
         @Override
         public void onClick(DialogInterface dialog, int which) {
             showGuide();
+        }
+    }
+
+    private class ImageClearAnimatorListener implements Animator.AnimatorListener {
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            mImgClearTalk.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
         }
     }
 }

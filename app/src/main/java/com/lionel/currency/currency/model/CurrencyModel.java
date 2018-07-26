@@ -28,7 +28,9 @@ public class CurrencyModel implements ICurrencyModel {
             List<CurrencyRateObject> currencyRateObjectList = new ArrayList<>();
             int index = 0;
             try {
+                // Jsoup連接上指定網址, 並抓取資料回來
                 Document doc = Jsoup.connect(url).get();
+                // 開始解析抓取回來的資料
                 // 抓取國家幣別和買進賣出各兩種後, set進CurrencyRate物件, 再存入List中
                 for (Element eCountry : doc.select("div.hidden-phone.print_show")) {
                     CurrencyRateObject currencyRateObject = new CurrencyRateObject();
